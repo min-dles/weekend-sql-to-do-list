@@ -1,18 +1,66 @@
 html, body {
     margin: 0;
     padding: 0;
+    background-color: rgba(181, 190, 107, 0.599);
 }
 
 header {
     background-color: rgb(224, 139, 65);
     width: 100%;
     height: 100%;
+    padding: 40px 0px 20px;
 }
 
-header h1 {
-    margin-left: 10px;
+h1, h2, h3, button {
+    font-family: Impact, 'Haettenschweiler', 'Franklin Gothic Bold', 'Charcoal', 'Helvetica Inserat', 'Bitstream Vera Sans Bold', 'Arial Black', 'sans serif'; 
+}
+
+#nameBtn, #submitBtn {
+    font-size: 17px;
+    padding: 10px;
+}
+
+button:hover {
+    background-color: rgb(224, 139, 65);
+}
+
+form, caption, label, input, ul, li { 
+    font-family: 'Palatino', 'Palatino Linotype', 'Palatino LT STD', 'Book Antiqua', 'Georgia', 'serif'; 
+    font-size: 16px;
+}
+
+ul {
+    list-style-type: square;
+}
+
+li {
+    margin: 25px 0;
+    font-size: 20px;
 }
 
 .content {
     margin-left: 20px;
+    padding-top: 30px;
+}
+
+#container {
+    position: relative;
+    min-height: 100vh;
+}
+
+#to-do-list-display {
+    padding-bottom: 3rem;
+}
+
+.true {
+    background-color: rgb(71, 86, 71);
+    text-decoration-line: line-through;
+    font-size: 16px;
+    color: grey;
+    font-family: 'Andale Mono', 'AndaleMono', 'monospace'; 
+}
+
+footer {
+    width: 100%;
+    height: 3rem;
 }
