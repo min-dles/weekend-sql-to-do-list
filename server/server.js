@@ -11,7 +11,9 @@ const PORT = 5000;
 
 // Router & Route(s): 
 const taskRouter = require('./routes/task.router.js');
+const userRouter = require('./routes/user.router.js');
 app.use('/task-list', taskRouter);
+app.use('/user', userRouter);
 
 // PORT listening for requests
 app.listen(PORT, () => {
