@@ -54,12 +54,14 @@ function getTasks() {
         $('#list-view').empty();
         // loop thru tasks response & render to DOM
         for(let task of response) {
+            // For SELECT: true values mean task is completed
+            // false values mean task is in progress (pending) 
             $('#list-view').append(`
-            <li data-id=${task.id}>
+            <li id=${task.id} data-id=${task.id} class="${task.status}">
                 ${task.task} ➡️ STATUS:
                 <select name="status" class="statusChoice">
-                    <option value="WIP" class="pending" selected>In Progress</option>
-                    <option value="completed" class="done">Completed</option>
+                    <option value="WIP" class="pending" ${task.status ? null : 'selected'}>In Progress</option>
+                    <option value="completed" class="done" ${task.status ? 'selected' : null}>Completed</option>
                 </select>
                 ➡️ DELETE?
                 <button class="deleteBtn">❌</button>
@@ -112,15 +114,33 @@ function deleteTask() {
 }
 
 // user can UPDATE a task item in Database & render change to DOM:
+// TO-DO: need to tie the status to the chosen dropdown 
 function taskStatus() {
     let idToUpdate = $(this).parent().data('id');
     console.log('ID being updated for status change:', idToUpdate);
+    const targetSelector = `li#${idToUpdate} select option:selected`
+    // Turn string targetSelector to an HTML element
+    let statusSelection = $(targetSelector)
+    // setting it to index 0 
+    console.log(statusSelection[0]);
+    console.log({targetSelector}, statusSelection[0].text );
 
+    let taskStatus;
+
+    if(statusSelection[0].text === 'Completed') {
+        console.log('completed');
+        taskStatus = true;
+    } else if(statusSelection[0].text === 'In Progress') {
+        console.log('pending');
+        taskStatus = false;
+    }
+
+    // Now do the ajax call after logic is defined - 
     $.ajax({
         method: 'PUT',
         url: `/task-list/${idToUpdate}`,
         data: {
-            status: true
+            status: taskStatus
         }
     }).then(function (response) {
         getTasks();
