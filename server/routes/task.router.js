@@ -44,8 +44,41 @@ taskRouter.post('/', (req, res) => {
 })
 
 // PUT (to update tasks as "complete" or "in progress")
+taskRouter.put('/:id', (req, res) => {
+    //req.params should look like: { id: '3' }
+    let idToUpdate = req.params.id;
+    let statusUpdate = req.body.status;
+    let sqlText = `
+        UPDATE "tasks"
+            SET "status"=$1
+            WHERE "id"=$2;`;
+    let sqlValues = [statusUpdate, idToUpdate];
+    pool.query(sqlText, sqlValues)
+        .then((dbRes) => {
+            res.sendStatus(200);
+        }).catch((dbErr) => {
+            res.sendStatus(500);
+        })
+})
 
 // DELETE: option for tasks to be deleted from list & removed from Database:
+taskRouter.delete('/:id', (req, res) => {
+    let idToDelete = req.params.id;
+    // Sanitize SQL inputs: 
+    let sqlText = `
+        DELETE from "tasks"
+            WHERE "id"=$1;`;
+    let sqlValues = [idToDelete];
+    pool.query(sqlText, sqlValues)
+        .then((dbRes) => {
+            // status message: OK
+            res.sendStatus(200);
+        }).catch((dbErr) => {
+            console.log('delete /task-list/:id error:', dbErr);
+            // status message: Internal Server Error
+            res.sendStatus(500);
+        })
+})
 
 // export this router for connection to the server: 
 module.exports = taskRouter;

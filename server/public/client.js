@@ -5,6 +5,8 @@ $(document).ready(function() {
     clickListeners();
     getUserName();
     getTasks();
+    $('#list-view').on('click', '.deleteBtn', deleteTask);
+    $('#list-view').on('change', '.statusChoice', taskStatus);
 })
 
 // CLICK LISTENERS - need two for USER & TASKS 
@@ -52,14 +54,18 @@ function getTasks() {
         $('#list-view').empty();
         // loop thru tasks response & render to DOM
         for(let task of response) {
+            // For SELECT: true values mean task is completed
+            // false values mean task is in progress (pending) 
             $('#list-view').append(`
-            <li>${task.task} ➡️ STATUS:
-            <select name="status" class="statusChoice">
-                <option value="WIP" selected>In Progress</option>
-                <option value="completed">Completed</option>
-            </select>
-            ➡️ DELETE?
-            <button class="deleteBtn">❌</button></li>`)
+            <li id=${task.id} data-id=${task.id} class="${task.status}">
+                ${task.task} ➡️ STATUS:
+                <select name="status" class="statusChoice">
+                    <option value="WIP" class="pending" ${task.status ? null : 'selected'}>In Progress</option>
+                    <option value="completed" class="done" ${task.status ? 'selected' : null}>Completed</option>
+                </select>
+                ➡️ DELETE?
+                <button class="deleteBtn">❌</button>
+            </li>`)
         }
     })
 }
@@ -88,5 +94,57 @@ function collectName(newUser) {
         $('#userName').val('');
     }).catch(function (error) {
         console.log('Error with POST for /user:', error);
+    })
+}
+
+// user can DELETE a task item from DOM & Database: 
+function deleteTask() {
+    // delete task by the database ID of <li> selected 
+    let idToDelete = $(this).parent().data('id');
+    $.ajax({
+        method: 'DELETE',
+        url: `/task-list/${idToDelete}`
+    }).then(function (response) {
+        // call getTasks to update DOM:
+        getTasks();
+    }).catch(function(error) {
+        alert('Oh no, issue with deleting')
+        console.log(`Error deleting ${idToDelete} error ---> ${error}`);
+    })
+}
+
+// user can UPDATE a task item in Database & render change to DOM:
+// TO-DO: need to tie the status to the chosen dropdown 
+function taskStatus() {
+    let idToUpdate = $(this).parent().data('id');
+    console.log('ID being updated for status change:', idToUpdate);
+    const targetSelector = `li#${idToUpdate} select option:selected`
+    // Turn string targetSelector to an HTML element
+    let statusSelection = $(targetSelector)
+    // setting it to index 0 
+    console.log(statusSelection[0]);
+    console.log({targetSelector}, statusSelection[0].text );
+
+    let taskStatus;
+
+    if(statusSelection[0].text === 'Completed') {
+        console.log('completed');
+        taskStatus = true;
+    } else if(statusSelection[0].text === 'In Progress') {
+        console.log('pending');
+        taskStatus = false;
+    }
+
+    // Now do the ajax call after logic is defined - 
+    $.ajax({
+        method: 'PUT',
+        url: `/task-list/${idToUpdate}`,
+        data: {
+            status: taskStatus
+        }
+    }).then(function (response) {
+        getTasks();
+    }).catch(function(error) {
+        console.log(`Error taskStatus on ${idToUpdate}, error --> ${error}`);
     })
 }
