@@ -3,6 +3,7 @@ const userRouter = express.Router();
 
 const pool = require('../modules/pool.js');
 
+// GET For user name to be updated (customizing client-side)
 userRouter.get('/', (req, res) => {
     console.log('GET /user');
 

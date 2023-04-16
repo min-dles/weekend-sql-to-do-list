@@ -11,17 +11,17 @@
 </head>
 <body>
     <header>
-        <h1>To-Do List Maker:</h1>
+        <h1 class="content">To-Do List Maker:</h1>
     </header>
 
     <section id="user-input">
-        <form>
+        <form class="content">
             <caption>First thing's first: what is your name?</caption>
             <label for="userName">Name:</label>
             <input type="text" name="userName" id="userName" placeholder="spongebob" />
             <button type="button" id="nameBtn">Save Name</button>
         </form>
-        <form>
+        <form class="content">
             <caption>Add a task to your to-do list here:</caption>
             <label for="taskNotes">Task:</label>
             <input type="text" name="taskNotes" id="taskNotes" placeholder="i.e. go out for a delicious cup of coffee" />
@@ -31,15 +31,15 @@
 
     <section id="to-do-list-display">
     <!-- second table in DB used to customize user's name here: -->
-        <h2><span id="user">(NAME'S / YOUR)</span> To-Do List:</h2>
-        <ul>
+        <h2 class="content"><span id="user">(NAME'S / YOUR)</span> To-Do List:</h2>
+        <ul id="list-view" class="content">
             <li>Placeholder text, this is an example of a task</li>
             <li>more tasks will go here, etc.</li>
         </ul>
     </section>
 
     <footer>
-        <h3>This app brought to you by: mandi 👾</h3>
+        <h3 class="content">This app brought to you by: mandi 👾</h3>
     </footer>
 </body>
 </html>

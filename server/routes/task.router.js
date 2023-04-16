@@ -19,11 +19,29 @@ taskRouter.get('/', (req, res) => {
         })
         .catch((dbErr) => {
             console.log('SQL query in GET /task-list failed:', dbErr);
+            // 500 is Internal Server Error
             res.sendStatus(500)
         })
 })
 
 // POST:
+taskRouter.post('/', (req, res) => {
+    let newTask = req.body;
+    let sqlText = `INSERT INTO "tasks"
+        ("task", "status")
+        VALUES
+        ($1, 'false');`;
+    // is it .task or .taskNotes per the ID set in index.html on input field?
+    let sqlValues = [newTask.task];
+    pool.query(sqlText, sqlValues)
+        .then((dbRes) => {
+            // status message: created
+            res.sendStatus(201);
+        }).catch(error => {
+            // status message: internal server error
+            res.sendStatus(500);
+        })
+})
 
 // PUT (to update tasks as "complete" or "in progress")
 
