@@ -2,12 +2,35 @@ console.log('client-side javascript is working! ✨');
 
 $(document).ready(function() {
     console.log('client js still working yeah~ 👾');
+    clickListeners();
     getUserName();
     getTasks();
 })
 
+// CLICK LISTENERS - need two for USER & TASKS 
+function clickListeners() {
+    // FIRST, collect user data
+    $('#nameBtn').on('click', function() {
+        // user input sent as object: 
+        let newUser = {
+            name: $('#userName').val(),
+        };
+        collectName(newUser);
+
+    });
+    // SECOND, collect task data
+    $('#submitBtn').on('click', function() {
+        // user input for TASKS: 
+        let newTask = {
+            task: $('#taskNotes').val(),
+            status: 'false',
+        };
+        collectNewTasks(newTask);
+    });
+}
+
+// RENDER USERNAME TO THE DOM
 function getUserName() {
-    console.log('this is function getUserName');
     $.ajax({
         method: 'GET',
         url: '/user'
@@ -20,6 +43,7 @@ function getUserName() {
     })
 }
 
+// RENDER TASKS TO THE DOM
 function getTasks() {
     $.ajax({
         method: 'GET', 
@@ -29,13 +53,40 @@ function getTasks() {
         // loop thru tasks response & render to DOM
         for(let task of response) {
             $('#list-view').append(`
-            <li>${task.task}. STATUS:
+            <li>${task.task} ➡️ STATUS:
             <select name="status" class="statusChoice">
                 <option value="WIP" selected>In Progress</option>
                 <option value="completed">Completed</option>
             </select>
-            , DELETE?
+            ➡️ DELETE?
             <button class="deleteBtn">❌</button></li>`)
         }
+    })
+}
+
+// send user input to the database: 
+function collectNewTasks(newTask) {
+    $.ajax({
+        method: 'POST',
+        url: '/task-list',
+        data: newTask
+    }).then(function (response) {
+        getTasks();
+        $('#taskNotes').val('');
+    }).catch(function (error) {
+        console.log('Error with POST /task-list:', error);
+    })
+}
+
+function collectName(newUser) {
+    $.ajax({
+        method: 'POST', 
+        url: '/user',
+        data: newUser
+    }).then(function (response) {
+        getUserName();
+        $('#userName').val('');
+    }).catch(function (error) {
+        console.log('Error with POST for /user:', error);
     })
 }
