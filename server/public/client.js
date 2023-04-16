@@ -6,6 +6,7 @@ $(document).ready(function() {
     getUserName();
     getTasks();
     $('#list-view').on('click', '.deleteBtn', deleteTask);
+    $('#list-view').on('change', '.statusChoice', taskStatus);
 })
 
 // CLICK LISTENERS - need two for USER & TASKS 
@@ -57,8 +58,8 @@ function getTasks() {
             <li data-id=${task.id}>
                 ${task.task} ➡️ STATUS:
                 <select name="status" class="statusChoice">
-                    <option value="WIP" selected>In Progress</option>
-                    <option value="completed">Completed</option>
+                    <option value="WIP" class="pending" selected>In Progress</option>
+                    <option value="completed" class="done">Completed</option>
                 </select>
                 ➡️ DELETE?
                 <button class="deleteBtn">❌</button>
@@ -107,5 +108,23 @@ function deleteTask() {
     }).catch(function(error) {
         alert('Oh no, issue with deleting')
         console.log(`Error deleting ${idToDelete} error ---> ${error}`);
+    })
+}
+
+// user can UPDATE a task item in Database & render change to DOM:
+function taskStatus() {
+    let idToUpdate = $(this).parent().data('id');
+    console.log('ID being updated for status change:', idToUpdate);
+
+    $.ajax({
+        method: 'PUT',
+        url: `/task-list/${idToUpdate}`,
+        data: {
+            status: true
+        }
+    }).then(function (response) {
+        getTasks();
+    }).catch(function(error) {
+        console.log(`Error taskStatus on ${idToUpdate}, error --> ${error}`);
     })
 }
