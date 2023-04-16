@@ -9,6 +9,7 @@ $(document).ready(function() {
 
 // CLICK LISTENERS - need two for USER & TASKS 
 function clickListeners() {
+    // FIRST, collect user data
     $('#nameBtn').on('click', function() {
         // user input sent as object: 
         let newUser = {
@@ -16,6 +17,16 @@ function clickListeners() {
         };
         // testing what newUser looks like in console: 
         console.log(newUser);
+
+    });
+    // SECOND, collect task data
+    $('#submitBtn').on('click', function() {
+        // user input for TASKS: 
+        let newTask = {
+            task: $('#taskNotes').val(),
+            status: 'false',
+        };
+        console.log(newTask);
     });
 }
 
