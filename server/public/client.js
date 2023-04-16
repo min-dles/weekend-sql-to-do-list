@@ -5,6 +5,7 @@ $(document).ready(function() {
     clickListeners();
     getUserName();
     getTasks();
+    $('#list-view').on('click', '.deleteBtn', deleteTask);
 })
 
 // CLICK LISTENERS - need two for USER & TASKS 
@@ -53,13 +54,15 @@ function getTasks() {
         // loop thru tasks response & render to DOM
         for(let task of response) {
             $('#list-view').append(`
-            <li>${task.task} ➡️ STATUS:
-            <select name="status" class="statusChoice">
-                <option value="WIP" selected>In Progress</option>
-                <option value="completed">Completed</option>
-            </select>
-            ➡️ DELETE?
-            <button class="deleteBtn">❌</button></li>`)
+            <li data-id=${task.id}>
+                ${task.task} ➡️ STATUS:
+                <select name="status" class="statusChoice">
+                    <option value="WIP" selected>In Progress</option>
+                    <option value="completed">Completed</option>
+                </select>
+                ➡️ DELETE?
+                <button class="deleteBtn">❌</button>
+            </li>`)
         }
     })
 }
@@ -88,5 +91,21 @@ function collectName(newUser) {
         $('#userName').val('');
     }).catch(function (error) {
         console.log('Error with POST for /user:', error);
+    })
+}
+
+// user can DELETE a task item from DOM & Database: 
+function deleteTask() {
+    // delete task by the database ID of <li> selected 
+    let idToDelete = $(this).parent().data('id');
+    $.ajax({
+        method: 'DELETE',
+        url: `/task-list/${idToDelete}`
+    }).then(function (response) {
+        // call getTasks to update DOM:
+        getTasks();
+    }).catch(function(error) {
+        alert('Oh no, issue with deleting')
+        console.log(`Error deleting ${idToDelete} error ---> ${error}`);
     })
 }
