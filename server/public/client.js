@@ -2,12 +2,25 @@ console.log('client-side javascript is working! ✨');
 
 $(document).ready(function() {
     console.log('client js still working yeah~ 👾');
+    clickListeners();
     getUserName();
     getTasks();
 })
 
+// CLICK LISTENERS - need two for USER & TASKS 
+function clickListeners() {
+    $('#nameBtn').on('click', function() {
+        // user input sent as object: 
+        let newUser = {
+            name: $('#userName').val(),
+        };
+        // testing what newUser looks like in console: 
+        console.log(newUser);
+    });
+}
+
+// RENDER USERNAME TO THE DOM
 function getUserName() {
-    console.log('this is function getUserName');
     $.ajax({
         method: 'GET',
         url: '/user'
@@ -20,6 +33,7 @@ function getUserName() {
     })
 }
 
+// RENDER TASKS TO THE DOM
 function getTasks() {
     $.ajax({
         method: 'GET', 
