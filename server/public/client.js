@@ -26,7 +26,7 @@ function clickListeners() {
             task: $('#taskNotes').val(),
             status: 'false',
         };
-        console.log(newTask);
+        collectNewTasks(newTask);
     });
 }
 
@@ -54,13 +54,27 @@ function getTasks() {
         // loop thru tasks response & render to DOM
         for(let task of response) {
             $('#list-view').append(`
-            <li>${task.task}. STATUS:
+            <li>${task.task} ➡️ STATUS:
             <select name="status" class="statusChoice">
                 <option value="WIP" selected>In Progress</option>
                 <option value="completed">Completed</option>
             </select>
-            , DELETE?
+            ➡️ DELETE?
             <button class="deleteBtn">❌</button></li>`)
         }
+    })
+}
+
+// send user input to the database: 
+function collectNewTasks(newTask) {
+    $.ajax({
+        method: 'POST',
+        url: '/task-list',
+        data: newTask
+    }).then(function (response) {
+        getTasks();
+        $('#taskNotes').val('');
+    }).catch(function (error) {
+        console.log('Error with POST /task-list:', error);
     })
 }
