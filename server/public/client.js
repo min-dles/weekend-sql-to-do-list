@@ -15,8 +15,7 @@ function clickListeners() {
         let newUser = {
             name: $('#userName').val(),
         };
-        // testing what newUser looks like in console: 
-        console.log(newUser);
+        collectName(newUser);
 
     });
     // SECOND, collect task data
@@ -76,5 +75,18 @@ function collectNewTasks(newTask) {
         $('#taskNotes').val('');
     }).catch(function (error) {
         console.log('Error with POST /task-list:', error);
+    })
+}
+
+function collectName(newUser) {
+    $.ajax({
+        method: 'POST', 
+        url: '/user',
+        data: newUser
+    }).then(function (response) {
+        getUserName();
+        $('#userName').val('');
+    }).catch(function (error) {
+        console.log('Error with POST for /user:', error);
     })
 }
