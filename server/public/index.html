@@ -7,9 +7,39 @@
     <link rel="stylesheet" href="./styles.css" />
     <script src="./vendors/jquery.js"></script>
     <script src="./client.js"></script>
-    <title>To-Do List Maker</title>
+    <title>📝 To-Do List Maker ✅</title>
 </head>
 <body>
-    
+    <header>
+        <h1>To-Do List Maker:</h1>
+    </header>
+
+    <section id="user-input">
+        <form>
+            <caption>First thing's first: what is your name?</caption>
+            <label for="userName">Name:</label>
+            <input type="text" name="userName" id="userName" placeholder="spongebob" />
+            <button type="button" id="nameBtn">Save Name</button>
+        </form>
+        <form>
+            <caption>Add a task to your to-do list here:</caption>
+            <label for="taskNotes">Task:</label>
+            <input type="text" name="taskNotes" id="taskNotes" placeholder="i.e. go out for a delicious cup of coffee" />
+            <button type="button" id="submitBtn">Add to List</button> 
+        </form>
+    </section>
+
+    <section id="to-do-list-display">
+    <!-- second table in DB used to customize user's name here: -->
+        <h2> (NAME'S / YOUR) To-Do List:</h2>
+        <ul>
+            <li>Placeholder text, this is an example of a task</li>
+            <li>more tasks will go here, etc.</li>
+        </ul>
+    </section>
+
+    <footer>
+        <h3>This app brought to you by: mandi 👾</h3>
+    </footer>
 </body>
 </html>

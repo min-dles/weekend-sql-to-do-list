@@ -1,0 +1,14 @@
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: rgb(224, 139, 65);
+    width: 100%;
+    height: 100%;
+}
+
+header h1 {
+    margin-left: 10px;
+}
